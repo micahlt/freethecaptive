@@ -39,9 +39,7 @@ Most network adapters have the ability to recieve and broadcast a network signal
 
 ## Pre-Setup
 
-<details>
-<summary>If you have trouble with network configuration, read this!</summary>
-I had a Raspberry Pi 3 Model B lying around that was perfect for this project.  However, there are a few things to set up with this specific Pi:
+If you have trouble with network configuration, read this!  I had a Raspberry Pi 3 Model B lying around that was perfect for this project.  However, there are a few things to set up with this specific Pi:
 
 ### Install `iptables`
 
@@ -51,9 +49,9 @@ The `create_ap` script uses `iptables`, which does not come installed by default
 sudo apt install -y iptables
 ```
 
-### Set up the secondary WiFi card
+### Set up a secondary WiFi card
 
-Like I mentioned earlier, the Raspberry Pi 3 requires a secondary WiFi card.  I got one that did not require drivers and was easily recognized in `lsusb`.  However, I ran into another problem.  By default, `wpa_supplicant` (the network manager on Raspbian) has a generic configuration for all adapters, meaning that when I plugged in the adapter it automatically connected to the same network as the Pi's integrated WiFi radio.  There is a way to change this, though.  The following steps are taken from [this Stack Exchange question](https://raspberrypi.stackexchange.com/a/104717/146567).  
+Like I mentioned earlier, the Raspberry Pi 3 requires a secondary WiFi card.  **Your device may not!**  I got one that did not require drivers and was easily recognized in `lsusb`.  However, I ran into another problem.  By default, `wpa_supplicant` (the network manager on Raspbian) has a generic configuration for all adapters, meaning that when I plugged in the adapter it automatically connected to the same network as the Pi's integrated WiFi radio.  There is a way to change this, though.  The following steps are taken from [this Stack Exchange question](https://raspberrypi.stackexchange.com/a/104717/146567).  
 
 1. **Find your adapter names**
 
@@ -94,8 +92,6 @@ systemctl enable wpa_supplicant@[your second adapter name].service
 ```
 
 Notice that we're only _disabling_ the original `wpa_supplicant` service.  That means you can still revert the changes if you want to by disabling the individual adapter services and enabling the original service.
-  
-</details>
 
 ## Actual setup
 
@@ -130,24 +126,18 @@ Pwned! Now you can surf the Internet!
 
 The `create_ap` script is a wonderful tool for easily bridging your WiFi connection to other devices.  First, use the `ifconfig` tool to identify the name of your adapter(s).  Names should be something like `wlan0`, `eth0`, or `wlps0`, though it may vary across devices.
 
-<details>
-<summary>For single adapter setup</summary>
+### For single adapter setup
 
 ```bash
 create_ap [network adapter name] [network adapter name] [your broadcast network name] [your network password]
 ```
-  
-</details>
 
-<details>
-<summary>For dual adapter setup</summary>
+### For dual adapter setup
   
 ```bash
 create_ap [broadcasting adapter name] [recieving adapter name] [your broadcast network name] [your network password]
 ```
   
-</details>
-
 ## Conclusion
 
 Captive portals are incredibly insecure, and with this amount of minimal effort they can be successfully infiltrated.  Again, I take _zero responsibility_ for the use of this tutorial.  Should you get into trouble with law enforcement or regulations, that's not my fault.  Final disclaimer.
